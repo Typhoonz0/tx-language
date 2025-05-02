@@ -1,0 +1,26 @@
+{
+  "name": "tx-syntax-highlighting",
+  "displayName": "tx Language Support",
+  "description": "Syntax highlighting for the E programming language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "tx",
+        "aliases": ["tx", "tx"],
+        "extensions": [".tx"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tx",
+        "scopeName": "source.tx",
+        "path": "./syntaxes/tx.tmLanguage.json"
+      }
+    ]
+  }
+}
