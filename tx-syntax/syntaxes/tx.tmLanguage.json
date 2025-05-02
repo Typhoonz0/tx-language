@@ -1,0 +1,36 @@
+{
+  "name": "tx Language",
+  "scopeName": "source.tx",
+  "patterns": [
+    { "name": "keyword.control.tx", "match": "\\b(str|bool|list|float|int|set|dict|tuple|obj|import|library|module|fn|pass|for|range|in|if|else if|else|as|global)\\b" },
+    { "name": "constant.numeric.tx", "match": "\\b\\d+\\b" },
+    { "name": "comment.line.tx", "match": "\\#.*" },
+    { "name": "entity.name.function.tx", "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(" },
+    { "name": "punctuation.definition.bracket.tx", "match": "\\b(stop)\\s*$" },
+    {
+      "name": "string.quoted.single.tx",
+      "begin": "'",
+      "end": "'",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.tx" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.tx" }
+      }
+    },
+    {
+      "name": "string.quoted.double.tx",
+      "begin": "\"",
+      "end": "\"",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.tx" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.tx" }
+      }
+    }
+    
+  ],
+  "repository": {},
+  "scope": "text.tx"
+}
