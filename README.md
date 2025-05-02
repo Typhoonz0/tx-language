@@ -104,16 +104,26 @@ std.list.sort: mylist
 
 ## How to use?
 usage: main.py [-h] [-o OUTPUT] [--no-run] [--keep] [--version] [--unix-shell-script] [source]
+
 e.g. python3 main.py test.tx -o awesome.py --keep 
+
 tx → Python Compiler
 
 required arguments:
+
   source               Source .tx file
 
 options:
+
   -h, --help           show this help message and exit
+  
   -o, --output OUTPUT  Output .py file
+  
   --no-run             Don't run the compiled file
+  
   --keep               Keep .py output file 
+  
   --version            Show compiler version
+  
   --unix-shell-script  Add shebang line and chmod +x for shell execution
+  
