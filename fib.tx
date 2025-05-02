@@ -1,0 +1,16 @@
+import library libraries.stdio as std 
+
+fn main {
+    int n = 10 
+    int a = 0
+    int b = 1
+    next = b 
+    count = 1
+    while ; count <= n {
+        std.out: next; " "
+        count += 1
+        a, b = b, next           
+        next = a + b
+    }
+    std.out: "\n"
+}

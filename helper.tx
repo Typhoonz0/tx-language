@@ -1,0 +1,5 @@
+import library libraries.stdio as std
+
+fn concatenate ; one ; two {
+    std.out : one + two
+}

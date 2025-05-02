@@ -1,0 +1,353 @@
+import library libraries.stdio as std
+import library os
+import library sys
+import library random
+import library time
+import library datetime
+
+fn main {
+    global balance
+    clear:
+    loadBalance:
+    banner: "main"
+    std.out: "\nYour balance: $" ; balance ; "\n"
+    std.out: "S - Slots\nR - Roulette\nB - Blackjack\nE - Exit\n"
+    str menu = std.input: "> "
+    if ; menu == "s" {
+        slots:
+    }
+    else if ; menu == "r" {
+        roulette:
+    }
+    else if ; menu == "b" {
+        blackjack:
+    }
+    else if ; menu == "e" {
+        exit:
+    }
+    else if ; menu == "reset" {
+        balance = 1234
+        save : balance
+        exit:
+    }
+    else if ; menu == "cheat" {
+        balance *= 10
+        save : balance
+        exit:
+    }
+    else {
+        main:
+    }
+}
+
+
+fn clear {
+    if ; os.name == "nt" {
+        os.system: "cls"
+    } 
+    else {
+      os.system: "clear" 
+    }
+}
+
+fn loadBalance {
+    t = os.path.exists: "misc/balance.txt"
+    if ; not t {
+        obj f = std.file.open: "misc/balance.txt"; "w"
+        std.file.write: "1234"; f
+        std.out: "Balance initialized!\n"
+        exit
+    }
+    else {
+        obj f = std.file.open: "misc/balance.txt"; "r"
+        global balance
+        balance = std.file.read: f
+    }
+}
+
+fn save ; balance {
+    balance = changetype: balance ; str
+    obj f = std.file.open: "misc/balance.txt"; "w"
+    std.file.write: balance; f
+    std.file.flush: f
+}
+
+fn banner ; game {
+    dict banners = {
+        "slots" :: "--------SLOTS--------",
+        "roulette" :: "-------ROULETTE------",
+        "blackjack" :: "------BLACKJACK------",
+        "main" :: "-------CASINO-------"
+    dict }
+    str x = banners.get: game ; "\n"
+    std.out: x
+}
+
+
+fn animateSlots {
+    list choices = ["🍒", "🔔", "💎", "🍋", "⭐", "7️⃣", "🍇"]
+    for ; _ ; range 6 {
+        x = random.choice: choices
+        banner: "slots"
+        std.out: "\n"
+        std.out: x
+        std.out: "\n"
+        std.out: x
+        std.out: "\n"
+        std.out: x
+        std.out: "\n"
+        time.sleep: 0.2
+        clear:
+    }
+}
+
+fn slots {
+    banner: "slots"
+    global balance, winnings
+    winnings = 0
+    winnings = changetype: winnings ; int
+    std.out: "\nBet amount (or 0 to go back): "
+    int bet = std.input: "> "
+    bet = changetype: bet ; int
+    balance = changetype: balance ; int
+    if ; bet == 0 {
+        main:
+    }
+    if ; bet > balance {
+        std.out: "Not enough money...\n"
+        main:
+    }
+    clear:
+    animateSlots:
+    list choices = ["🍒", "🔔", "💎", "🍋", "⭐", "7️⃣", "🍇"]
+    str a = random.choice: choices
+    str b = random.choice: choices
+    str c = random.choice: choices
+    clear:
+    banner: "slots"
+    std.out: "\n" ; a ; "\n" ; b ; "\n" ; c ; "\n"
+    if ; a == b and b == c {
+        winnings = bet * 5
+    }
+    else if ; a == b or b == c or a == c {
+        winnings = bet * 2
+    }
+    else {
+        winnings -= bet
+    }
+    if ; winnings < 0 {
+        balance += winnings - bet
+        std.out: "You lost $" ; bet ; "\n"
+        save : balance
+    }
+    else {
+        balance += winnings - bet
+        std.out: "You won $" ; winnings ; "!\n"
+        save : balance
+    }
+    slots:
+}
+
+fn animateRoulette {
+    list choices = ["o-------", "-o------", "--o-----", "---o----", "----o---", "-----o--", "------o-", "-------o"]
+    banner: "roulette"
+    for ; _ ; range 6 {
+        xy = random.choice: choices
+        clear:
+        std.out: "\n"
+        std.out: xy
+        xy = random.choice: choices
+        time.sleep: 0.2
+    }
+    std.out: "\n"
+    banner: "roulette"
+    clear:
+}
+
+fn addWinnings ; type ; bet ; result ; mode {
+    global balance
+    balance = changetype: balance ; int
+    bet = changetype: bet ; int
+    if ; result == type {
+        if ; mode == "ff" {
+            winnings = bet * 2
+        }
+        else {
+            winnings = bet * 36
+        }
+        balance += winnings - bet
+        std.out: "\nYou won $" ; winnings ; "!\n"
+        save : balance
+        roulette:
+    }
+    else {
+        balance -= bet
+        std.out: "\nYou lost $" ; bet ; "\n"
+        save : balance
+        roulette:
+    }
+}
+
+fn fiftyFifty ; bet ; mode {
+    if ; mode == "rb" {
+        std.out: "Choice:\nRed - 1\nBlack - 0\n"
+        int type = std.input: "> "
+    }
+    else {
+        std.out: "Choice:\nOdd - 1\nEven - 0\n"
+        int type = std.input: "> "
+    }
+    animateRoulette:
+    int result = random.randint: 0 ; 1
+    addWinnings: type ; bet ; result ; "ff"
+}
+
+fn number ; bet {
+    std.out: "Which number (0 - 36): "
+    int type = std.input: "> "
+    animateRoulette:
+    int result = random.randint: 0 ; 36
+    addWinnings: type ; bet ; result ; "n"
+}
+
+fn roulette {
+    global balance 
+    balance = changetype: balance ; int
+    banner: "roulette"
+    std.out: "\nWhich game mode:\nRB - red/black\nOE - odd/even\nN - number\n"
+    str mode = std.input: "> "
+    xz = std.string.lower: mode
+    if ; xz not in ["rb", "oe", "n"] {
+        main:
+    }
+    std.out: "Bet amount (or 0 to go back): \n"
+    int bet = std.input: "> "
+    bet = changetype: bet ; int
+    if ; bet == 0 {
+        main:
+    }
+    if ; bet > balance {
+        std.out: "Not enough money\n"
+        roulette:
+    }
+    else {
+        if ; xz in ["rb", "oe"] {
+            fiftyFifty : bet ; xz
+        }
+        else if ; xz == "n" {
+            number : bet
+        }
+    }
+}
+
+fn calculateHand ; hand {
+    global hand_total
+    int total = 0
+    int aces = 0
+    for ; card ; in ; hand {
+        if ; card in ["J", "Q", "K"] {
+            total += 10
+        }
+        else if ; card == "A" {
+            total += 11
+            aces += 1
+        }
+        else {
+            total += card
+        }
+    }
+
+    while ; total > 21 and aces {
+        total -= 10
+        aces -= 1
+    }
+    hand_total = total
+}
+
+fn blackjack {
+    banner: "blackjack"
+    global balance, hand_total
+    balance = changetype: balance ; int
+    std.out: "\nBet amount (or 0 to go back): \n"
+    int bet = std.input: "> "
+    bet = changetype: bet ; int
+    if ; bet == 0 {
+        main:
+    }
+    if ; bet > balance {
+        std.out: "Not enough money...\n"
+        blackjack:
+    }
+
+    list deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"] * 4
+    random.shuffle: deck
+
+    list playerHand = []
+    list dealerHand = []
+    aa = std.list.pop: deck
+    playerHand.append: aa
+    ab = std.list.pop: deck
+    playerHand.append: ab
+    ba = std.list.pop: deck
+    dealerHand.append: ba
+    bb = std.list.pop: deck
+    dealerHand.append: bb
+
+    while ; True {
+        clear:
+        banner: "blackjack"
+        calculateHand: playerHand
+        std.out: "\nYour hand: " ; playerHand ; "(total: " ; hand_total ; ")\n"
+        std.out: "\nDealer's hand: [" ; dealerHand[0] ; ", ?]\n"
+        if ; hand_total > 21 {
+            std.out: "You bust! You lost $" ; bet ; "\n"
+            balance -= bet
+            save : balance
+            blackjack:
+        }
+        std.out: "Hit (h)\nStand (s)\n"
+        str move = std.input: "> "
+        if ; move == "h" {
+            xxz = std.list.pop: deck
+            playerHand.append: xxz
+        }
+        else if ; move == "s" {
+            break
+        }
+    }
+
+    while ; True {
+        calculateHand: dealerHand
+        if ; hand_total < 17 {
+            zxz = std.list.pop: deck
+            dealerHand.append: zxz
+        }
+        else {
+            break
+        }
+    }
+
+    clear:
+    banner: "blackjack"
+    calculateHand: playerHand
+    int playerTotal = hand_total
+    std.out: "\nYour hand: " ; playerHand ; "(total: " ; playerTotal ; ")\n"
+    calculateHand: dealerHand
+    int dealerTotal = hand_total
+    std.out: "Dealer's hand: " ; dealerHand ; "(total: " ; dealerTotal ; ")\n"
+
+    if ; dealerTotal > 21 or playerTotal > dealerTotal {
+        std.out: "You win! You earned $" ; bet ; "\n"
+        balance += bet
+    }
+    else if ; playerTotal == dealerTotal {
+        std.out: "Push! Your bet is returned.\n"
+    }
+    else {
+        std.out: "You lose! You lost $" ; bet ; "\n"
+        balance -= bet
+    }
+    save : balance
+    blackjack:
+}
+

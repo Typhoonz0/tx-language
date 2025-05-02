@@ -1,0 +1,173 @@
+# @@@@@@@ @@@  @@@
+#   @!!   @@!  !@@
+#  @!!    !@@!@! 
+#   !!:    !: :!! 
+#    :    :::  :::
+
+# There are two types of imports:
+# Libraries - which are python scripts and native python libraries
+# Modules - which are .tx scripts
+
+import library libraries.stdio as std
+import library os
+import module helper.tx
+
+# Function defenition syntax: fn name {} | fn name ; arg1 ; arg2 { }
+# main will always execute first, regardless of its order in the program
+fn main {
+    # Function call syntax: 
+    # func: | func: arg1 ; arg2 | library.func: | library.func: arg1 ; arg2 | library.class.func: | library.class.func: arg1 ; arg2 
+    types:
+    for_loops: 
+    range_loops: 
+    while_loops: 
+    files:
+    strings:
+    lists:
+    helper.concatenate : "Good" ; "bye \n"
+    final:
+}
+
+fn types {
+    # variables are usually bound to their functions, but to extend it to other functions, use the global keyword
+    global cases
+
+    # Variable syntax: type name = value
+    std.out: "Case 1: Testing type int, float, bool, list, str, dict, tuple \n"
+    int cases = 0
+    float pi = 3.14 
+    bool awesome = True
+    # Change the type of a variable, True becomes "True"
+    awesome = changetype: awesome ; str 
+    list items = [1, 2, 3] 
+    str name = "liam" 
+    # Dictionaries use :: to assign key value pairs, and close with 'dict }' to distinguish from code blocks
+    dict banners = {
+        "world" :: "earth",
+        "money" :: "mine",
+    dict }
+    tuple a = (0, 6, 2, (1, 3))
+    std.out: "Cases: "; cases; "\nPi: "; pi; "\nAwesome?: "; awesome; "\nItems: "; items; "\nName: "; name; "\nWorld: "; banners["world"]; "\nMoney: "; banners["money"]; "\nA tuple: "; a; "\n";
+    cases += 1
+}
+
+fn for_loops {
+    global cases
+    std.out: "Case 2: For loop with initial counter included \n"
+    # For loops syntax: for ; counter ; in ; iterable
+    list xlist = [1, 2, 3]
+    for ; int j = 0 ; in ; xlist {
+        std.out: j; "\n"
+    } 
+    cases += 1
+    std.out: "Case 3: For loop with initial counter excluded \n"
+
+    for ; j ; in ; xlist {
+        std.out: j; "\n"
+    }
+    cases += 1
+}
+
+fn range_loops {
+    global cases
+    std.out: "Case 4: Range loop with initial counter included \n"
+
+    # Range loop syntax: for ; counter ; range
+    # in our case, this loop will loop 5 times in theory
+    for ; int i = 0 ; range 5 {
+
+        # but, if we have already looped through it 3 times, break out of the loop early
+        if ; i == 3 {
+            break
+        }
+        else if ; i == 1 {
+            std.out: "ONE! \n" 
+        }
+        else {
+            std.out: i; "\n"
+        }
+    }
+    cases += 1
+    std.out: "Case 5: Range loop with initial counter excluded \n"
+    for ; i ; range 5 {
+        std.out: i; "\n"
+    cases += 1
+} 
+}
+
+fn while_loops {
+    global cases
+    std.out: "Case 6: While loop - fibonacci sequence: \n"
+    int n = 10 
+    int a = 0
+    int b = 1
+    next = b 
+    count = 1
+    std.out: a; " "
+    while ; count <= n {
+        std.out: next; " "
+        count += 1
+        a, b = b, next           
+        next = a + b
+    }
+    std.out: "\n"
+    cases += 1
+}
+
+fn files {
+    global cases
+    std.out: "Case 7: File operations: open, write, flush, close, reopen and read the file \n"
+    # Various file operations
+    obj f = std.file.open: "test.txt"; "w"
+    std.file.write: "Hello World"; f
+    # flush immediately writes the file to disk
+    std.file.flush: f        
+    std.file.close: f
+    obj g = std.file.open: "test.txt"; "r"
+    str x = std.file.read: g
+    os.remove: "test.txt"
+    std.out: x; "\n"          
+    cases += 1
+}
+
+fn strings {
+    global cases
+    # Various string operations
+    std.out: "Case 8: String operations: strip, replace, upper, lower, split, set, join, and get  \n"
+    str s = "string"
+    str qq = std.string.strip: "s"
+    str qw = std.string.replace: s; "world"; "Liam"
+    str qe = std.string.upper: s
+    str qr = std.string.lower: s
+    str qt = std.string.split: s; " "
+    str qy = std.string.set: "sep"; "-"
+    str qu = std.string.join: "sep"; s
+    str result = std.string.get: "sep"
+    std.out: qq; "\n"; qw; "\n"; qe; "\n"; qr; "\n"; qt; "\n"; qy; "\n"; qu; "\n"; result; "\n"
+    cases += 1
+}
+
+fn lists {
+    std.out: "Case 9: List operations: append, extend, sort, reverse, pop \n"
+    global cases
+    int d = 4
+    list ltesta = [1, 2, 3]
+    list ltestb = ["one", "two"]
+    list ltestc = ["three", "four"]
+    std.list.append: ltesta ; d ;
+    std.out: ltesta ;"\n";
+    std.list.extend: ltestb ; ltestc ;
+    std.out: ltestb ;"\n";
+    std.list.sort: ltestc;
+    std.out: ltestc ;"\n";
+    std.list.reverse: ltestb;
+    std.out: ltestb ;"\n";
+    std.list.pop: ltestb;
+    std.out: ltestb ;"\n";
+    cases += 1
+}
+
+fn final {
+    global cases
+    std.out: "Cases completed: "; cases; "/9 \n"
+}
