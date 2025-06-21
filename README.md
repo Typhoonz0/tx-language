@@ -1,5 +1,5 @@
 # TX PROGRAMMING LANGUAGE
-### Many dream of making their own programming language - this one's mine
+### Interpreted language in an interpreted language hell yeah
 ### Check out all the example files too!
 TX is a structured programming language built on top of Python but introduces brackets and strict type declarations. TX supports custom modules (.tx files) and Python library and script imports.
 #### Get syntax highlighting in VSCode: Ctrl + Shift + P -> Install extension from location -> select tx-syntax!
